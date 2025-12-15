@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block extra_css %}
+<style>
+    /* --- HERO SECTION --- */
+    .detail-hero {
+        position: relative;
+        height: 55vh;
+        overflow: hidden;
+        border-bottom: 1px solid var(--color-border);
+    }
+    .detail-hero img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.65);
+    }
+    .detail-hero-overlay {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 50px;
+        color: #fff;
+        background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0));
+    }
+    .detail-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        letter-spacing: -1px;
+        margin-bottom: 5px;
+    }
+    .detail-meta {
+        font-size: 1.1rem;
+        opacity: 0.8;
+        font-weight: 500;
+    }
+
+    /* --- CONTENT WRAPPER --- */
+    .detail-wrapper {
+        max-width: 1200px;
+        margin: 60px auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 40px;
+    }
+
+    /* --- LEFT INFO --- */
+    .detail-section {
+        background: var(--color-bg-secondary);
+        border: 1px solid var(--color-border);
+        padding: 30px;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.4);
+    }
+    .detail-section h3 {
+        font-family: var(--font-heading);
+        font-size: 1.6rem;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--color-border);
+        padding-bottom: 10px;
+    }
+    .detail-info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-top: 15px;
+    }
+    .detail-info-item {
+        background: #0f0f10;
+        border: 1px solid var(--color-border);
+        padding: 15px;
+        border-radius: 10px;
+    }
+    .detail-info-item span {
+        display: block;
+        font-size: 0.8rem;
+        color: var(--color-text-muted);
+        margin-bottom: 5px;
+    }
+    .detail-info-item strong {
+        font-size: 1.1rem;
+        color: #fff;
+        font-weight: 600;
+    }
+
+    /* --- PRICE CARD --- */
+    .price-card {
+        background: var(--color-bg-secondary);
+        border: 1px solid var(--color-border);
+        padding: 30px;
+        border-radius: 14px;
+        text-align: center;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.4);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .price-value {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #fff;
+    }
+    .contact-btn {
+        background: var(--color-accent);
+        color: #fff;
+        padding: 15px 25px;
+        font-weight: 700;
+        border-radius: 40px;
+        border: none;
+        cursor: pointer;
+        transition: 0.3s;
+        font-size: 1rem;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .contact-btn:hover {
+        background: var(--color-accent-hover);
+        transform: translateY(-2px);
+    }
+
+    /* --- BOTÃO EDITAR --- */
+    .edit-btn {
+        background: #f59e0b;
+        color: #fff;
+        padding: 15px 25px;
+        font-weight: 700;
+        border-radius: 40px;
+        border: none;
+        cursor: pointer;
+        transition: 0.3s;
+        font-size: 1rem;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .edit-btn:hover {
+        background: #d97706;
+        transform: translateY(-2px);
+    }
+
+    /* --- BOTÃO DELETAR --- */
+    .delete-btn {
+        background: #dc2626;
+        color: #fff;
+        padding: 15px 25px;
+        font-weight: 700;
+        border-radius: 40px;
+        border: none;
+        cursor: pointer;
+        transition: 0.3s;
+        font-size: 1rem;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .delete-btn:hover {
+        background: #b91c1c;
+        transform: translateY(-2px);
+    }
+
+    .back-link {
+        color: var(--color-text-muted);
+        font-size: 0.9rem;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    .back-link:hover {
+        color: #fff;
+    }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 900px) {
+        .detail-wrapper {
+            grid-template-columns: 1fr;
+        }
+        .detail-title {
+            font-size: 2.4rem;
+        }
+    }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+
+<!-- HERO -->
+<div class="detail-hero">
+    {% if car.photos %}
+        <img src="{{ car.photos.url }}" alt="{{ car.model }}">
+    {% else %}
+        <div style="width:100%;height:100%;background:#1a1a1a;"></div>
+    {% endif %}
+
+    <div class="detail-hero-overlay">
+        <h1 class="detail-title">{{ car.brand }} {{ car.model }}</h1>
+        <p class="detail-meta">Ano {{ car.model_year|default_if_none:"-" }} • ID {{ car.id }}</p>
+    </div>
+</div>
+
+<!-- WRAPPER -->
+<div class="detail-wrapper">
+
+    <!-- LEFT INFO -->
+    <div class="detail-section">
+        <h3>Detalhes Técnicos</h3>
+
+        <div class="detail-info-grid">
+            <div class="detail-info-item">
+                <span>Marca</span>
+                <strong>{{ car.brand }}</strong>
+            </div>
+            <div class="detail-info-item">
+                <span>Modelo</span>
+                <strong>{{ car.model }}</strong>
+            </div>
+            <div class="detail-info-item">
+                <span>Ano</span>
+                <strong>{{ car.model_year }}</strong>
+            </div>
+            <div class="detail-info-item">
+                <span>Valor estimado</span>
+                <strong>R$ {{ car.value|intcomma|default_if_none:"-" }}</strong>
+            </div>
+        </div>
+
+        <!-- ✅ BIO ADICIONADA AQUI -->
+        <h3 style="margin-top:40px;">Descrição</h3>
+        <p style="line-height:1.7; color: var(--color-text-muted); font-size: 1rem;">
+            {{ car.bio|default:"Nenhuma biografia disponível." }}
+        </p>
+    </div>
+
+    <!-- PRICE CARD -->
+    <div class="price-card">
+        <h3 style="font-size:1.4rem;">Valor Estimado</h3>
+        <div class="price-value">R$ {{ car.value|intcomma|default_if_none:"Sob Consulta" }}</div>
+
+        
+        <!-- ✅ BOTÕES APENAS PARA USUÁRIOS AUTENTICADOS -->
+        {% if user.is_authenticated %}
+            <!-- BOTÃO EDITAR -->
+            <a href="{% url 'car_update' pk=car.pk %}" class="edit-btn">✏️ Editar Carro</a>
+            
+            <!-- BOTÃO DELETAR -->
+            <a href="{% url 'car_delete' pk=car.pk %}" class="delete-btn">🗑️ Excluir Carro</a>
+        {% endif %}
+        
+        <a href="{% url 'cars_list' %}" class="back-link">Voltar para a lista</a>
+    </div>
+
+</div>
+
+{% endblock content %}

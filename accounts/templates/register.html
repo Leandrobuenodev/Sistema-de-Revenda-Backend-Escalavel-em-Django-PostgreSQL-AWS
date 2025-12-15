@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}Criar Conta{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Este CSS é SÓ da página de registro. */
+    .main-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* --- [MUDANÇA AQUI] --- */
+    /* Card de Registro com Borda Gradiente "Neon" */
+    .register-card {
+        max-width: 400px;
+        width: 100%;
+        margin: 50px auto; 
+        padding: 40px;
+        background: var(--color-bg-secondary);
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+
+        border: 2px solid transparent; /* Define uma borda transparente inicial */
+        background-origin: border-box; /* Faz o background se estender até a borda */
+        background-clip: padding-box, border-box; /* Controla onde o background é pintado */
+        background-image: linear-gradient(var(--color-bg-secondary), var(--color-bg-secondary)), 
+                          linear-gradient(to right, var(--color-accent), transparent); /* Dois backgrounds: um para o preenchimento, outro para a borda */
+        
+        transition: all 0.3s ease-in-out; /* Transição suave para o hover */
+    }
+
+    /* Efeito de brilho na borda ao passar o mouse */
+    .register-card:hover {
+        background-image: linear-gradient(var(--color-bg-secondary), var(--color-bg-secondary)), 
+                          linear-gradient(to right, var(--color-accent-hover), var(--color-accent)); /* Borda mais intensa no hover */
+        box-shadow: 0 0 25px rgba(220, 38, 38, 0.4); /* Sombra mais brilhante no hover */
+    }
+
+    .register-card h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        font-weight: 300;
+        font-family: var(--font-heading);
+    }
+
+    .register-card form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .register-card form p {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .register-card form label {
+        font-size: 0.9em;
+        color: var(--color-text-secondary);
+    }
+    .register-card form input {
+        width: 100%;
+        padding: 12px;
+        font-size: 1rem;
+        color: var(--color-text-primary);
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--color-border);
+        border-radius: 6px;
+        outline: none;
+        transition: border-color 0.3s;
+    }
+    .register-card form input:focus {
+        border-color: var(--color-accent);
+    }
+
+    /* Texto de ajuda do Django */
+    .register-card form .helptext {
+        font-size: 0.8rem;
+        color: var(--color-text-muted);
+        list-style: none;
+        padding-left: 0;
+    }
+    .register-card form .helptext ul {
+        list-style: none;
+        padding-left: 0;
+        margin-top: 5px;
+    }
+
+    .submit-btn {
+        background: var(--color-accent); 
+        color: white; 
+        padding: 12px 25px; 
+        border: none; 
+        border-radius: 6px; 
+        font-weight: 600; 
+        cursor: pointer; 
+        margin-top: 10px; 
+        transition: background 0.3s;
+        width: 100%;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+    }
+    .submit-btn:hover {
+        background: var(--color-accent-hover);
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="register-card">
+    <h2>Criar Conta</h2>
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        {{ user_form.as_p }}
+        
+        <button type="submit" class="submit-btn">Registrar</button>
+    </form>
+</div>
+{% endblock %}

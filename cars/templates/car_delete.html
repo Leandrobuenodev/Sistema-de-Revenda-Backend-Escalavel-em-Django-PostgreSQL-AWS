@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block extra_css %}
+<style>
+    /* --- HERO SECTION --- */
+    .delete-hero {
+        position: relative;
+        padding: 60px 20px 40px;
+        text-align: center;
+        color: #fff;
+        background: transparent;
+        border-bottom: 1px solid var(--color-border);
+    }
+    
+    .delete-title {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        margin-bottom: 8px;
+        color: #ff6b6b;
+    }
+    
+    .delete-subtitle {
+        font-size: 0.95rem;
+        opacity: 0.7;
+        font-weight: 400;
+    }
+
+    /* --- DELETE WRAPPER --- */
+    .delete-wrapper {
+        max-width: 700px;
+        margin: 60px auto;
+        padding: 0 20px;
+    }
+
+    /* --- DELETE SECTION --- */
+    .delete-section {
+        background: var(--color-bg-secondary);
+        border: 1px solid var(--color-border);
+        padding: 40px;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.4);
+    }
+
+    /* --- WARNING BOX --- */
+    .warning-box {
+        background: linear-gradient(135deg, rgba(255, 107, 107, 0.15), rgba(220, 38, 38, 0.15));
+        border: 2px solid #ff6b6b;
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .warning-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+    }
+
+    .warning-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #ff6b6b;
+        margin-bottom: 10px;
+    }
+
+    .warning-text {
+        color: var(--color-text-muted);
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    /* --- CAR INFO BOX --- */
+    .car-info-box {
+        background: #0f0f10;
+        border: 1px solid var(--color-border);
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+    }
+
+    .car-info-title {
+        font-size: 1.1rem;
+        color: var(--color-text-muted);
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .car-info-content {
+        text-align: center;
+    }
+
+    .car-name {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 8px;
+    }
+
+    .car-details {
+        color: var(--color-text-muted);
+        font-size: 1rem;
+    }
+
+    .car-value {
+        font-size: 1.3rem;
+        color: var(--color-accent);
+        font-weight: 600;
+        margin-top: 10px;
+    }
+
+    /* --- CAR IMAGE --- */
+    .car-image-preview {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .car-image-preview img {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 12px;
+        border: 1px solid var(--color-border);
+        object-fit: cover;
+    }
+
+    /* --- BUTTONS --- */
+    .buttons-container {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+        padding-top: 30px;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .btn {
+        padding: 15px 35px;
+        font-weight: 700;
+        border-radius: 40px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-danger {
+        background: #dc2626;
+        color: #fff;
+    }
+
+    .btn-danger:hover {
+        background: #b91c1c;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(220, 38, 38, 0.4);
+    }
+
+    .btn-secondary {
+        background: #2d2d2d;
+        color: #fff;
+        border: 1px solid var(--color-border);
+    }
+
+    .btn-secondary:hover {
+        background: #3d3d3d;
+        transform: translateY(-2px);
+    }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 768px) {
+        .delete-title {
+            font-size: 1.6rem;
+        }
+        
+        .delete-hero {
+            padding: 40px 20px 30px;
+        }
+        
+        .delete-section {
+            padding: 25px;
+        }
+
+        .buttons-container {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+        .car-name {
+            font-size: 1.4rem;
+        }
+
+        .warning-icon {
+            font-size: 2.5rem;
+        }
+    }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+
+<!-- HERO -->
+<div class="delete-hero">
+    <h1 class="delete-title">⚠️ Excluir Carro</h1>
+    <p class="delete-subtitle">Esta ação não pode ser desfeita</p>
+</div>
+
+<!-- DELETE WRAPPER -->
+<div class="delete-wrapper">
+    <div class="delete-section">
+        
+        <!-- WARNING BOX -->
+        <div class="warning-box">
+            <div class="warning-icon">🗑️</div>
+            <h3 class="warning-title">Atenção!</h3>
+            <p class="warning-text">
+                Você está prestes a excluir permanentemente este veículo do sistema. 
+                Esta ação é irreversível e todos os dados serão perdidos.
+            </p>
+        </div>
+
+        <!-- CAR IMAGE (se existir) -->
+        {% if car.photos %}
+        <div class="car-image-preview">
+            <img src="{{ car.photos.url }}" alt="{{ car.brand }} {{ car.model }}">
+        </div>
+        {% endif %}
+
+        <!-- CAR INFO -->
+        <div class="car-info-box">
+            <p class="car-info-title">Você está excluindo:</p>
+            <div class="car-info-content">
+                <h2 class="car-name">{{ car.brand }} {{ car.model }}</h2>
+                <p class="car-details">
+                    Ano: {{ car.model_year|default_if_none:"-" }} • 
+                    ID: {{ car.id }}
+                </p>
+                <p class="car-value">
+                    R$ {{ car.value|intcomma|default_if_none:"Valor não informado" }}
+                </p>
+            </div>
+        </div>
+
+        <!-- FORM -->
+        <form method="post">
+            {% csrf_token %}
+            
+            <p style="text-align: center; color: var(--color-text-muted); margin-bottom: 20px;">
+                Tem certeza que deseja excluir este carro?
+            </p>
+
+            <div class="buttons-container">
+                <button type="submit" class="btn btn-danger">
+                    🗑️ Sim, Excluir Permanentemente
+                </button>
+                <a href="{% url 'car_detail' pk=car.pk %}" class="btn btn-secondary">
+                    ← Cancelar e Voltar
+                </a>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+{% endblock content %}

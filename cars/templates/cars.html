@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block extra_css %}
+<style>
+    /* --- CSS ESPECÍFICO REFINADO --- */
+    .hero-video-section { 
+        position: relative; height: 60vh; overflow: hidden; 
+        margin-top: -81px; 
+    }
+    .hero-video { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+    .hero-content { 
+        position: relative; height: 100%; display: flex; flex-direction: column; 
+        justify-content: center; align-items: center; text-align: center; z-index: 2;
+        padding-top: 80px;
+    }
+    .hero-title { 
+        font-family: var(--font-heading); font-size: 4rem; font-weight: 800; 
+        letter-spacing: -1px; line-height: 1.1; margin-bottom: 15px; color: #fff;
+    }
+    .hero-subtitle { 
+        font-size: 1.25rem; color: rgba(255,255,255,0.9); font-weight: 400; letter-spacing: 1px; 
+    }
+
+    /* --- SEARCH --- */
+    .search-wrapper-hero { margin-top: 40px; width: 100%; max-width: 500px; }
+    .search-form { 
+        display: flex; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2); border-radius: 50px; 
+        padding: 5px;
+    }
+    .search-input { 
+        flex: 1; background: transparent !important; border: none; color: #fff !important; 
+        padding: 15px 25px; font-size: 1rem; outline: none;
+    }
+    .search-input::placeholder { color: rgba(255,255,255,0.6); }
+    .search-button { 
+        background: var(--color-accent); color: #fff; border: none; 
+        padding: 0 30px; border-radius: 40px; font-weight: 600; cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    /* --- SEÇÕES --- */
+    .section-spacing { margin-top: 100px; }
+    .section-header { 
+        display: flex; justify-content: space-between; align-items: flex-end; 
+        margin-bottom: 40px; border-bottom: 1px solid var(--color-border); padding-bottom: 20px;
+    }
+    .section-title { 
+        font-family: var(--font-heading); font-size: 2rem; font-weight: 700; 
+        color: #fff; letter-spacing: -0.5px; 
+    }
+    .section-subtitle { color: var(--color-text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* --- CARDS --- */
+    .featured-grid, .new-arrivals-grid {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); 
+        gap: 40px; width: 100%;
+        justify-content: center;
+    }
+
+    .pro-card {
+        background: var(--color-bg-secondary);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        overflow: hidden;
+        display: flex; 
+        flex-direction: column;
+        cursor: pointer;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+        box-shadow: 0 10px 30px -5px rgba(0,0,0,0.4);
+        transition: all 0.3s ease-in-out;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .pro-card:hover {
+        transform: translateY(-8px);
+        border-color: var(--color-accent);
+        box-shadow: 0 20px 40px -10px rgba(220, 38, 38, 0.4);
+    }
+
+    .pro-card-image { height: 320px; position: relative; overflow: hidden; }
+    .pro-card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+    .pro-card:hover .pro-card-image img { transform: scale(1.05); }
+
+    .pro-card-content { padding: 30px; display: flex; flex-direction: column; gap: 15px; }
+    .pro-card-meta { display: flex; gap: 15px; color: var(--color-accent); font-size: 0.85rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+    .pro-card-title { font-family: var(--font-heading); font-size: 2rem; font-weight: 700; line-height: 1.1; color: #fff; }
+    .pro-card-price { font-size: 1.5rem; font-weight: 500; color: #fff; margin-top: auto; padding-top: 20px; border-top: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; }
+
+    @media (max-width: 768px) {
+        .hero-title { font-size: 2.5rem; }
+        .featured-grid, .new-arrivals-grid { grid-template-columns: 1fr; }
+        .pro-card-image { height: 250px !important; }
+    }
+</style>
+{% endblock extra_css %}
+
+{% block hero %}
+<div class="hero-video-section">
+    <video autoplay muted loop playsinline class="hero-video">
+        <source src="{% static 'videos/Video Project.mp4' %}" type="video/mp4">
+    </video>
+    <div class="hero-content">
+        <h2 class="hero-title">THE ULTIMATE COLLECTION</h2>
+        <p class="hero-subtitle">CURATED FOR ENTHUSIASTS</p>
+
+        <div class="search-wrapper-hero">
+            <form method="GET" action="{% url 'cars_list' %}" class="search-form">
+                <input type="text" name="search" class="search-input" placeholder="Buscar modelo, marca..." value="{{ search|default:'' }}" autocomplete="off">
+                <button type="submit" class="search-button">BUSCAR</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock hero %}
+
+{% block back_button %}
+    {% if search %}
+    <a href="{% url 'cars_list' %}" class="home-button">← Voltar para lista completa</a>
+    {% endif %}
+{% endblock back_button %}
+
+{% block content %}
+    {% if cars %}
+        
+        <div class="section-spacing">
+            <div class="section-header">
+                <div>
+                    <p class="section-subtitle">Featured Inventory</p>
+                    <h2 class="section-title">LATEST ARRIVALS</h2>
+                </div>
+            </div>
+            
+            <div class="featured-grid">
+                {% for car in cars|slice:":2" %}
+                <a href="{% url 'car_detail' pk=car.pk %}" class="pro-card">
+                    <div class="pro-card-image">
+                        {% if car.photos %}
+                            <img src="{{ car.photos.url }}" alt="{{ car.model }}">
+                        {% else %}
+                            <div style="width:100%;height:100%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#666;">No Image</div>
+                        {% endif %}
+                    </div>
+                    <div class="pro-card-content">
+                        <div class="pro-card-meta">
+                            <span>{{ car.brand }}</span>
+                            <span>//</span>
+                            <span>{{ car.model_year|default_if_none:"-" }}</span>
+                        </div>
+                        <h3 class="pro-card-title">{{ car.model }}</h3>
+                        <div class="pro-card-price">
+                            <div>
+                                <span>Valor estimado</span><br>
+                                R$ {{ car.value|intcomma|default_if_none:"Sob Consulta" }}
+                            </div>
+                            <div class="btn-link"></div>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% if cars|length > 2 %}
+        <div class="section-spacing">
+            <div class="section-header">
+                <h2 class="section-title">MORE VEHICLES</h2>
+            </div>
+
+            <div class="new-arrivals-grid">
+                {% for car in cars|slice:"2:" %}
+                <a href="{% url 'car_detail' pk=car.pk %}" class="pro-card">
+                    <div class="pro-card-image" style="height: 450px;"> 
+                        {% if car.photos %}
+                            <img src="{{ car.photos.url }}" alt="{{ car.model }}">
+                        {% else %}
+                            <div style="width:100%;height:100%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#666;">No Image</div>
+                        {% endif %}
+                    </div>
+                    <div class="pro-card-content" style="padding: 25px;">
+                        <div class="pro-card-meta">
+                            <span>{{ car.brand }}</span>
+                            <!-- ✅ ANO ADICIONADO AQUI -->
+                            <span>//</span>
+                            <span>{{ car.model_year|default_if_none:"-" }}</span>
+                        </div>
+                        <h3 class="pro-card-title" style="font-size: 1.5rem;">{{ car.model }}</h3>
+                        <div class="pro-card-price" style="padding-top: 15px; font-size: 1.2rem;">
+                            R$ {{ car.value|intcomma|default_if_none:"-" }}
+                            <div class="btn-link" style="font-size: 0.8rem;"></div>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+
+        </div>
+        {% endif %}
+
+    {% else %}
+        <div style="text-align:center; padding: 100px 0;">
+            <h2 style="color: var(--color-text-muted); font-weight: 400;">Nenhum veículo encontrado para sua busca.</h2>
+            <a href="{% url 'cars_list' %}" class="home-button" style="margin-top: 20px; display: inline-block;">Limpar Filtros</a>
+        </div>
+    {% endif %}
+{% endblock content %}

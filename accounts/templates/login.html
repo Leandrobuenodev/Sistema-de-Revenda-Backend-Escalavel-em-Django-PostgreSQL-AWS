@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Login | APEX MOTORS{% endblock title %}
+
+{% block extra_css %}
+<style>
+    /* CSS ESPECÍFICO PARA O FORMULÁRIO DE LOGIN (Não alterado) */
+    
+    .login-wrapper {
+        max-width: 450px; 
+        margin: 80px auto;
+        padding: 40px; 
+        background: var(--color-bg-secondary);
+        border-radius: 12px; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        border: 1px solid var(--color-border);
+    }
+
+    .form-title {
+        font-family: var(--font-heading);
+        color: var(--color-accent); 
+        margin-bottom: 30px; 
+        font-weight: 700;
+        text-align: center;
+        letter-spacing: 1px;
+    }
+
+    /* Estilização dos campos do formulário */
+    .login-wrapper input[type="text"],
+    .login-wrapper input[type="email"],
+    .login-wrapper input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        font-size: 1rem;
+        color: var(--color-text-primary);
+        background-color: rgba(255, 255, 255, 0.08); 
+        border: 1px solid var(--color-border);
+        border-radius: 6px;
+        outline: none;
+        transition: border-color 0.3s;
+        margin-top: 5px; 
+    }
+    
+    .login-wrapper input:focus {
+        border-color: var(--color-accent);
+    }
+
+    /* Estilização dos parágrafos gerados por form.as_p (mantido) */
+    .login-wrapper p {
+        margin-bottom: 25px; 
+        color: var(--color-text-primary);
+        font-weight: 500;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    /* Estilização do botão de Submit */
+    .submit-button {
+        background: var(--color-accent); 
+        color: white; 
+        padding: 14px 25px; 
+        border: none; 
+        border-radius: 6px; 
+        font-weight: 600; 
+        cursor: pointer; 
+        margin-top: 20px; 
+        transition: background 0.3s;
+        width: 100%;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+    }
+    .submit-button:hover {
+        background: var(--color-accent-hover);
+    }
+
+    /* Link de Cadastro/Recuperação */
+    .login-links {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+    }
+    .login-links a {
+        color: var(--color-accent);
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+    .login-links a:hover {
+        color: var(--color-accent-hover);
+    }
+    
+    /* Estilo para erros de campo */
+    .errorlist {
+        color: var(--color-accent);
+        list-style: none;
+        padding: 5px 0;
+        font-size: 0.8rem;
+    }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="login-wrapper">
+        <h2 class="form-title">ACESSO DE MEMBRO</h2>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            {# Se houver erros globais (ex: login inválido) #}
+            {% if form.non_field_errors %}
+                <div style="color: var(--color-accent); margin-bottom: 20px; border: 1px solid var(--color-accent); padding: 10px; border-radius: 4px;">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {# --- CORREÇÃO: Renderiza os campos individualmente e os erros --- #}
+            {% for field in form %}
+                <p>
+                    {# Adiciona a classe CSS ao input para estilo #}
+                    {{ field.label_tag }} 
+                    {{ field }}
+                    {% for error in field.errors %}
+                        <ul class="errorlist">
+                            <li>{{ error }}</li>
+                        </ul>
+                    {% endfor %}
+                </p>
+            {% endfor %}
+            {# FIM DA CORREÇÃO #}
+            
+            <button type="submit" class="submit-button">
+                FAZER LOGIN
+            </button>
+        </form>
+
+        <div class="login-links">
+            Não tem uma conta? <a href="{% url 'register' %}">Registre-se aqui</a>
+        </div>
+        
+    </div>
+{% endblock content %}

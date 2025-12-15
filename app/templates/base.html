@@ -1,0 +1,214 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}APEX MOTORS{% endblock title %}</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS GLOBAL (TEMA APEX - PROFISSIONAL DARK) --- */
+        :root {
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            
+            --color-bg-main: #0a0a0a;
+            --color-bg-secondary: #141414;
+            --color-bg-elevated: #1f1f1f;
+            
+            --color-text-primary: #ffffff;
+            --color-text-secondary: #a0a0a0;
+            --color-text-muted: #666666;
+            
+            --color-accent: #dc2626; /* Crimson */
+            --color-accent-hover: #ef4444;
+            
+            --color-border: #262626;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-bg-main);
+            color: var(--color-text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(circle at 10% 20%, rgba(255, 0, 50, 0.05) 0%, transparent 40%),
+                              radial-gradient(circle at 90% 80%, rgba(0, 255, 153, 0.05) 0%, transparent 40%);
+        }
+
+        a { color: inherit; text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--color-accent); }
+
+        .container { max-width: 1440px; margin: 0 auto; padding: 0 40px; }
+
+        /* --- HEADER REFINADO (AJUSTADO PARA O LAYOUT ESQUERDO) --- */
+        .main-header-wrapper { 
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .header-controls { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            height: 80px; 
+            padding: 0; /* Remove padding interno para o logo encostar na lateral */
+        }
+        
+        /* CORREÇÃO DO TÍTULO: LOGO PEQUENO E ESQUERDO */
+        .brand-name { 
+            font-family: var(--font-heading);
+            color: #fff; 
+            font-weight: 700; 
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            flex-grow: 0; /* CRÍTICO: Não cresce, fica pequeno */
+            margin-right: auto; /* Empurra o conteúdo de navegação para a direita */
+            padding-left: 40px; /* Adiciona padding na lateral esquerda */
+            padding-right: 20px;
+        }
+        .brand-name span { color: var(--color-accent); } 
+        
+        /* NOVO ESTILO: BOTÕES GLASSMORHPISM / NEON */
+        .auth-actions-group {
+            display: flex;
+            gap: 15px; /* Espaço entre os botões */
+            align-items: center;
+            padding-right: 40px; /* Adiciona padding na lateral direita */
+        }
+        
+        .btn-auth-secondary, .add-car-button {
+            /* Glass Effect */
+            background: rgba(40, 40, 40, 0.4); 
+            backdrop-filter: blur(8px); 
+            
+            /* Neon Border/Glow */
+            border: 1px solid rgba(220, 38, 38, 0.5); /* Borda semi-transparente */
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.4); 
+            
+            /* Geral */
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 20px; /* Estilo de Cilindro */
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .btn-auth-secondary:hover, .add-car-button:hover {
+            background: rgba(220, 38, 38, 0.2); 
+            box-shadow: 0 0 15px var(--color-accent), inset 0 0 5px var(--color-accent);
+            color: #fff;
+        }
+
+        .btn-auth-primary { /* Estilo para o 'CADASTRAR-SE' se existir */
+            background: var(--color-accent);
+            border: 1px solid var(--color-accent);
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.7);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-auth-primary:hover {
+            background: var(--color-accent-hover);
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.9);
+        }
+        
+        main { flex-grow: 1; padding: 40px 0; }
+        
+        /* --- FOOTER --- */
+        .footer { 
+            background: var(--color-bg-secondary); 
+            color: var(--color-text-muted); 
+            padding: 60px 0 30px; 
+            border-top: 1px solid var(--color-border);
+            font-size: 0.9rem;
+        }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; padding-bottom: 30px; border-bottom: 1px solid var(--color-border); margin-bottom: 30px; }
+        .footer-logo { font-family: var(--font-heading); font-weight: 700; color: #fff; font-size: 1.5rem; }
+
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% block hero %}{% endblock %}
+
+    <div class="main-header-wrapper">
+        <div class="container header-controls">
+            <div style="min-width: 140px;">
+                {% block back_button %}{% endblock %}
+            </div>
+            
+            <a href="{% url 'cars_list' %}" class="brand-name">
+                APEX<span style="color:var(--color-accent);">.</span>
+            </a>
+            
+            <div class="auth-actions-group">
+                
+                {% if user.is_authenticated %}
+                    {# USUÁRIO LOGADO: MOSTRA LOGOUT e CADASTRAR CARRO #}
+
+                    <a href="{% url 'new_car' %}" class="add-car-button">
+                        VENDER
+                    </a>
+                    
+                    <a href="{% url 'logout' %}" class="btn-auth-secondary">
+                        LOGOUT
+                    </a>
+                    
+                {% else %}
+                    {# USUÁRIO DESLOGADO: MOSTRA LOGIN e CADASTRAR-SE #}
+
+                    <a href="{% url 'login' %}" class="btn-auth-secondary">
+                        LOGIN
+                    </a>
+                    
+                    <a href="{% url 'register' %}" class="btn-auth-primary">
+                        CADASTRAR-SE
+                    </a>
+                    
+                {% endif %}
+
+            </div>
+            </div>
+    </div>
+
+    <main>
+        {% block search %}{% endblock %}
+        
+        <div class="container main-content">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">APEX MOTORS</div>
+                <div>Driven by passion. Engineered for performance.</div>
+            </div>
+            <p style="text-align: center;">&copy; 2025 Apex Motors. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
